@@ -18,7 +18,6 @@ Same pattern as `@jo51yon/claudia-rte` — a private git dependency, not an npm 
 
 ```tsx
 import { Shell, resolveTab } from '@jo51yon/claudia-shell';
-import '@jo51yon/claudia-shell/style.css';
 import { LayoutDashboard, Users } from 'lucide-react'; // only the icons you actually use
 
 const icons = { LayoutDashboard, Users };
@@ -87,11 +86,32 @@ lazy-loaded component — Claudia's own `overview`/`projects`/`vault` are like t
 in `App.tsx` rather than through the generic lookup). Design your own `renderContent` to check
 for those before falling through to a generic registry lookup, the same way Claudia's does.
 
-## Theming
+## On not shipping CSS
 
-Structural CSS only — no color opinions baked in beyond safe fallbacks. Override these custom
-properties in your own stylesheet: `--shell-accent`, `--shell-surface`,
-`--shell-surface-raised`, `--shell-text`, `--shell-text-dim`, `--shell-ink`.
+v1.0.0/v1.1.0 shipped `style.css` with a `--shell-*` custom-property namespace. Checking real
+sibling packages before Lintel's integration shipped found this was the wrong choice: Claudia's
+own dashboard uses `sidebar-nav-item`, Lintel and PETGI both independently converged on plain
+`nav-item` for the same concept, and `@jo51yon/claudia-footer` (a real sibling package, already
+adopted by three projects) ships no stylesheet at all — it renders plain, sensible class names
+(`app-footer`, `footer-link`) and lets each consumer's own existing CSS style them. There is no
+single true class-name convention across this ecosystem for Shell to hardcode and match
+everyone with.
+
+v1.2.0 follows that same headless pattern: `Shell` applies generic default class names
+(`sidebar`, `nav-item`, `active`, ...) and a `classNames` prop overrides any of them, so an
+adopting app can pass its own existing names and pick up its current CSS with zero new
+stylesheet needed:
+
+```tsx
+<Shell
+  tabs={tabs}
+  classNames={{ nav: 'sidebar', navItem: 'nav-item', navItemActive: 'active' }}
+  /* ...other props */
+/>
+```
+
+If your app's classes already happen to be `sidebar`/`nav-item`/`active` (Lintel's and PETGI's
+both do), you don't need to pass `classNames` at all — those are the defaults.
 
 ## Status
 

@@ -27,6 +27,37 @@ export interface ShellTab {
   badge_key: string | null;
 }
 
+/**
+ * Every class name Shell applies, all overridable. Defaults are deliberately generic
+ * (`sidebar`, `nav-item`, `active`) because that's what checking real sibling packages found:
+ * Claudia's own dashboard uses `sidebar-nav-item`, Lintel and PETGI both independently
+ * converged on plain `nav-item` — there is no one true name across this ecosystem, so Shell
+ * cannot hardcode any single app's convention and match everyone. Pass the consuming app's
+ * own existing class names here to pick up its current CSS with zero new stylesheet needed —
+ * this is also why Shell ships no style.css of its own (see README "On not shipping CSS").
+ */
+export interface ShellClassNames {
+  nav?: string;
+  header?: string;
+  navList?: string;
+  navItem?: string;
+  navItemActive?: string;
+  badge?: string;
+  footer?: string;
+  signOutButton?: string;
+}
+
+const DEFAULT_CLASSES: Required<ShellClassNames> = {
+  nav: 'sidebar',
+  header: 'sidebar-header',
+  navList: 'sidebar-nav',
+  navItem: 'nav-item',
+  navItemActive: 'active',
+  badge: 'nav-badge',
+  footer: 'sidebar-footer',
+  signOutButton: 'nav-item',
+};
+
 export interface ShellProps {
   tabs: ShellTab[];
   active: string;
@@ -48,41 +79,45 @@ export interface ShellProps {
   /** Rendered inside the footer above the sign-out button — a role pill, a plan badge,
    *  whatever the consuming app wants there. Optional; renders nothing by default. */
   footerExtra?: React.ReactNode;
+  /** Override any/all class names Shell applies. Unset keys fall back to DEFAULT_CLASSES.
+   *  See ShellClassNames' own doc comment for why this exists instead of a fixed convention. */
+  classNames?: ShellClassNames;
 }
 
 export default function Shell({
   tabs, active, onSelect, onSignOut, icons = {}, visibleRoles = [], badges = {},
-  wordmark = 'App', header, footerExtra,
+  wordmark = 'App', header, footerExtra, classNames = {},
 }: ShellProps) {
+  const cx = { ...DEFAULT_CLASSES, ...classNames };
   const items = tabs
     .filter((t) => t.visible_if === 'always' || visibleRoles.includes(t.visible_if))
     .sort((a, b) => a.display_order - b.display_order);
 
   return (
-    <nav className="shell-sidebar">
-      <div className="shell-sidebar-header">
-        {header ?? <p className="shell-sidebar-wordmark">{wordmark}</p>}
+    <nav className={cx.nav}>
+      <div className={cx.header}>
+        {header ?? <p>{wordmark}</p>}
       </div>
-      <div className="shell-sidebar-nav">
+      <div className={cx.navList}>
         {items.map((item) => {
           const Icon = item.icon ? icons[item.icon] : undefined;
           const badgeValue = item.badge_key ? badges[item.badge_key] : undefined;
           return (
             <button
               key={item.tab_key}
-              className={`shell-nav-item${active === item.tab_key ? ' active' : ''}`}
+              className={`${cx.navItem}${active === item.tab_key ? ` ${cx.navItemActive}` : ''}`}
               onClick={() => onSelect(item.tab_key)}
             >
               {Icon && <Icon size={16} aria-hidden />}
               <span>{item.label}</span>
-              {Boolean(badgeValue) && <span className="shell-nav-badge">{badgeValue}</span>}
+              {Boolean(badgeValue) && <span className={cx.badge}>{badgeValue}</span>}
             </button>
           );
         })}
       </div>
-      <div className="shell-sidebar-footer">
+      <div className={cx.footer}>
         {footerExtra}
-        <button className="shell-btn-quiet" onClick={onSignOut}>Sign out</button>
+        <button className={cx.signOutButton} onClick={onSignOut}>Sign out</button>
       </div>
     </nav>
   );
