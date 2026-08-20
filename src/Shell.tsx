@@ -40,6 +40,11 @@ export interface ShellProps {
   visibleRoles?: string[];
   badges?: Record<string, number>;
   wordmark?: string;
+  /** Overrides the plain-text wordmark entirely when the consuming app has a richer branded
+   *  header (an SVG mark, a strapline) than a single text string can express — Lintel's <Mark/>
+   *  is exactly this case, found on its first real adoption of this package. When set, this
+   *  renders instead of `wordmark`, not alongside it. */
+  header?: React.ReactNode;
   /** Rendered inside the footer above the sign-out button — a role pill, a plan badge,
    *  whatever the consuming app wants there. Optional; renders nothing by default. */
   footerExtra?: React.ReactNode;
@@ -47,7 +52,7 @@ export interface ShellProps {
 
 export default function Shell({
   tabs, active, onSelect, onSignOut, icons = {}, visibleRoles = [], badges = {},
-  wordmark = 'App', footerExtra,
+  wordmark = 'App', header, footerExtra,
 }: ShellProps) {
   const items = tabs
     .filter((t) => t.visible_if === 'always' || visibleRoles.includes(t.visible_if))
@@ -56,7 +61,7 @@ export default function Shell({
   return (
     <nav className="shell-sidebar">
       <div className="shell-sidebar-header">
-        <p className="shell-sidebar-wordmark">{wordmark}</p>
+        {header ?? <p className="shell-sidebar-wordmark">{wordmark}</p>}
       </div>
       <div className="shell-sidebar-nav">
         {items.map((item) => {
