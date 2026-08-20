@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 — 2026-08-20
+
+- `Shell`: added optional `header` prop. When supplied, renders instead of the plain-text
+  `wordmark` — found necessary on Lintel's first real adoption attempt, whose sidebar header is
+  a branded SVG mark, not a string. Purely additive; no export removed, no existing behavior
+  changed for callers not using the new prop.
+
 ## 1.0.0 — 2026-08-20
 
 Initial extraction from the shell pattern proven on Claudia's own dashboard

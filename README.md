@@ -95,8 +95,8 @@ properties in your own stylesheet: `--shell-accent`, `--shell-surface`,
 
 ## Status
 
-v1.0.0. Extracted 2026-08-20 from Claudia's own Stage 1 dashboard shell (shipped and verified
-live 2026-08-19) — this is the second real place this shape has been used, not a speculative
-design. Not yet adopted by any other project; PETGI is deliberately excluded from being that
-second adopter right now (live client demo in progress) and Lintel/S3 Photobook adoption has
-not started.
+v1.1.0. Extracted 2026-08-20 from Claudia's own Stage 1 dashboard shell (shipped and verified
+live 2026-08-19). Lintel is the first real adopter, in progress 2026-08-20 (outer/non-property
+nav only — Lintel's sidebar is contextual, and only that slice fits Shell's flat-tabs model;
+see `docs/_platform/shell-pattern-scoping.md` in the claudia repo for the full writeup once
+that lands). PETGI and S3 Photobook adoption has not started.

@@ -1,6 +1,6 @@
 {
   "name": "@jo51yon/claudia-shell",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Claudia shared dashboard-shell UI: a DB-driven sidebar (Shell) and a resolveTab helper, extracted from the pattern proven on Claudia's own dashboard. See docs/_platform/shell-pattern-scoping.md in the claudia repo.",
   "type": "module",
   "main": "./dist/index.js",
