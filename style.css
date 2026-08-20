@@ -1,0 +1,61 @@
+/* Structural only — no assumption that any particular design-token names exist in a consuming
+   app's own stylesheet. Every color reads through a --shell-* custom property with a sensible
+   fallback, so the package works unstyled out of the box and themes cleanly by overriding these
+   in the consumer's own CSS: --shell-accent, --shell-surface, --shell-surface-raised,
+   --shell-text, --shell-text-dim, --shell-ink (a color that reads on top of --shell-accent). */
+
+.shell-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 220px;
+  background: var(--shell-surface, #17181c);
+  color: var(--shell-text, #e8e6e1);
+}
+
+.shell-sidebar-header { padding: 20px 16px 12px; }
+.shell-sidebar-wordmark { font-weight: 600; font-size: 1.1rem; margin: 0; }
+
+.shell-sidebar-nav { display: flex; flex-direction: column; gap: 2px; padding: 8px; flex: 1; overflow-y: auto; }
+
+.shell-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: var(--shell-text-dim, #9a9890);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+.shell-nav-item:hover { color: var(--shell-text, #e8e6e1); background: var(--shell-surface-raised, #202126); }
+.shell-nav-item.active { color: var(--shell-text, #e8e6e1); background: var(--shell-surface-raised, #202126); font-weight: 500; }
+
+.shell-nav-badge {
+  margin-left: auto;
+  background: var(--shell-accent, #b08d57);
+  color: var(--shell-ink, #17181c);
+  border-radius: 10px;
+  padding: 0 7px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.shell-sidebar-footer { padding: 12px 16px 16px; }
+
+.shell-btn-quiet {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--shell-surface-raised, #202126);
+  background: transparent;
+  color: var(--shell-text-dim, #9a9890);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+}
+.shell-btn-quiet:hover { color: var(--shell-text, #e8e6e1); }
